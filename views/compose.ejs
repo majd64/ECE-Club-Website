@@ -1,0 +1,27 @@
+<%- include("header") -%>
+
+<div class="compose-container container">
+  <h1 class="page-header">Add Announcement</h1>
+  <p class="page-top-text">You can write HTML in your announcement. To add a link use the following HTML <b>&lt;a href="https://www.myURL.com"&gt;Text&lt;/a&gt;</b>. To add an image use the following <b>&lt;img src="https://urlOfMyImage"&gt;</b>
+    and to make something bold use the following <b>&lt;b&gt; Text I want bolded &lt;/b&gt;</b>. For a full list of HTML tags click <a target="_blank" href="https://www.w3schools.com/TAGS/default.ASP"> here <a>. Unfortuantley you cannot upload
+        images yet, I will add that though!
+  </p>
+  <form action="/compose" method="post">
+    <div class="form-group">
+      <label for="title-text-area">Title</label>
+      <input type="text" class="form-control" id="title-text-area" name="title">
+    </div>
+
+    <div class="form-group">
+      <label for="body-text-area">Post</label>
+      <textarea class="form-control rounded-0" id="body-text-area" rows="10" name="body"></textarea>
+    </div>
+
+    <div class="compose-buttons">
+      <button class="btn btn-success" type="submit" name="button">Publish</button>
+      <a class="btn btn-secondary" href="/edit-posts">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<%- include("footer") -%>

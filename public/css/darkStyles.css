@@ -1,0 +1,45 @@
+body{
+  background-color: black;
+  color: white;
+}
+
+.social-container {
+  background-color: black;
+  box-shadow: 0 0 0 0 #ccc;
+  border-top: 8px solid #222;
+  border-bottom: 8px solid #222;
+}
+
+.header img {
+  opacity: 0.2;
+}
+
+.navbar {
+  border-top: 5px solid #222;
+  background-color: black;
+}
+
+hr{
+  background-color: white;
+}
+
+footer{
+  background-color: #222;
+}
+
+.modal-body, .modal-content{
+  background-color: black;
+}
+
+.btn-secondary{
+  background-color: #f6f6f6;
+  color: black;
+}
+
+.card{
+  background-color: #222;
+}
+
+.list-group li{
+  background-color: #222;
+}
