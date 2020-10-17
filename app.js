@@ -1,11 +1,15 @@
+//ece.skule.ca server
+//by Majd Hailat - majdhailat64@gmail
+//the testApp.js is an exact copy of this file minus all the mysql code cuz
+//i dont have mysql on my computer
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const cookieParser = require("cookie-parser");
 const md5 = require("md5");
-var nodemailer = require('nodemailer');
-
 var mysql = require('mysql');
+
+//connecting to database
 var con = mysql.createConnection({
   host: "localhost",
   user: "ececlub_webmaster",
@@ -13,15 +17,7 @@ var con = mysql.createConnection({
   database: "ececlub_posts"
 });
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'webmaster@ece.skule.ca',
-    pass: 'ECEWebmasterHTML11'
-  }
-});
-
-con.connect(function(err) {
+con.connect( err => {
   if (err) throw err;
 });
 
@@ -33,10 +29,10 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
 app.use(cookieParser());
 
-app.get("/", function(req, res) {
-  con.query("SELECT * FROM post ORDER BY id DESC", function(err, result, fields) {
+app.get("/", (req, res) => {
+  con.query("SELECT * FROM post ORDER BY id DESC", function(err, result, fields) {//getting all posts from db
     if (err) throw err;
-    res.render("home", {
+    res.render("home", {//rendering home page, passing in all posts as well as if request is authenticated
       posts: result,
       isAuth: isAuth(req)
     });
@@ -55,37 +51,16 @@ app.get("/contact", function(req, res) {
   res.render('contact');
 });
 
-app.post("/contact", function(req, res) {
-  ejs.renderFile(__dirname + "/views/feedbackEmail.ejs", {
-    title: req.body.title,
-    body: req.body.body
-  }, function(err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('success');
-      var mailOptions = {
-        from: 'webmaster@ece.skule.ca',
-        to: 'webmaster@ece.skule.ca',
-        subject: "ECE CLUB ANONYMOUS FEEDBACK",
-        html: data
-      };
+app.get("/success", (req, res) => {
+  req.render('success')
+})
 
-      transporter.sendMail(mailOptions, function(error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-    }
-  })
-});
-
-var password = "richBirthday472";
-app.post("/login", function(req, res) {
-  if (req.body.password === password) {
-    res.cookie('token', md5(req.body.password))
+var password = "richBirthday472";//password to make a post
+app.post("/login", (req, res) => {
+  if (req.body.password === password) {//checking for correct password
+    res.cookie('token', md5(req.body.password));//setting a cookie with the user
+    //to keep them authenticated so that after they get redirected to compose
+    //they will still be authenticated
     res.send({
       success: true,
     });
@@ -97,7 +72,7 @@ app.post("/login", function(req, res) {
 });
 
 app.get("/compose", function(req, res) {
-  if (isAuth(req)) {
+  if (isAuth(req)) {//checking if theyre authenticated
     res.render('compose');
   } else {
     res.redirect("/");
@@ -106,9 +81,11 @@ app.get("/compose", function(req, res) {
 
 app.get("/edit-posts", function(req, res) {
   if (isAuth(req)) {
-    con.query("SELECT * FROM post ORDER BY id DESC", function(err, result, fields) {
+    con.query("SELECT * FROM post ORDER BY id DESC", (err, result, fields) => {
+      //getting all posts again to display in the edit posts page
       if (err) throw err;
       res.render("edit-posts", {
+        //rendering edit posts page, passing in all posts
         posts: result,
       });
     });
@@ -120,6 +97,7 @@ app.get("/edit-posts", function(req, res) {
 app.post("/delete-post", function(req, res) {
   if (isAuth(req)) {
     var sql = "DELETE FROM post WHERE id = '" + req.body.postID + "'";
+    //deleting post specific by the request body
     con.query(sql, function(err, result) {
       if (err) throw err;
     });
@@ -132,10 +110,11 @@ var weekDays = ["Sunday", "Monday", "Tueday", "wednesday", "Thuday", "Friday", "
 app.post("/compose", function(req, res) {
   if (isAuth(req)) {
     var d = new Date();
+    //creating the data string
     var date = "" + weekDays[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
-    var title = req.body.title;
-    var body = req.body.body;
-
+    var title = req.body.title;//post title
+    var body = req.body.body;//post body
+    //adding post to db
     var sql = "INSERT INTO post (title, body, date) VALUES ('" + title + "', '" + body + "', '" + date + "')";
     con.query(sql, function(err, result) {
       if (err) throw err;
@@ -145,7 +124,7 @@ app.post("/compose", function(req, res) {
 });
 
 function isAuth(req) {
-  if (req.cookies.token === md5(password)) {
+  if (req.cookies.token === md5(password)) {//checking for auth
     return true;
   }
   return false;
