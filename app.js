@@ -8,12 +8,13 @@ const ejs = require("ejs");
 const cookieParser = require("cookie-parser");
 const md5 = require("md5");
 var mysql = require('mysql');
+require('dotenv').config();
 
 //connecting to database
 var con = mysql.createConnection({
   host: "localhost",
-  user: "ececlub_webmaster",
-  password: "snowMonkey",
+  user: process.env.DBUSER,
+  password: process.env.DBPASS,
   database: "ececlub_posts"
 });
 
@@ -55,10 +56,9 @@ app.get("/success", (req, res) => {
   req.render('success')
 })
 
-var password = "richBirthday472";//password to make a post
 app.post("/login", (req, res) => {
-  if (req.body.password === password) {//checking for correct password
-    res.cookie('token', md5(req.body.password));//setting a cookie with the user
+  if (req.body.password === process.env.PASSWORD) {//checking for correct password
+    res.cookie('token', md5(process.env.PASSWORD));//setting a cookie with the user
     //to keep them authenticated so that after they get redirected to compose
     //they will still be authenticated
     res.send({
@@ -114,6 +114,9 @@ app.post("/compose", function(req, res) {
     var date = "" + weekDays[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
     var title = req.body.title;//post title
     var body = req.body.body;//post body
+    title = title.replace("'", "\'");
+    body = body.replace("'", "\'");
+
     //adding post to db
     var sql = "INSERT INTO post (title, body, date) VALUES ('" + title + "', '" + body + "', '" + date + "')";
     con.query(sql, function(err, result) {
@@ -124,7 +127,7 @@ app.post("/compose", function(req, res) {
 });
 
 function isAuth(req) {
-  if (req.cookies.token === md5(password)) {//checking for auth
+  if (req.cookies.token === md5(process.env.PASSWORD)) {//checking for auth
     return true;
   }
   return false;
