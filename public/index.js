@@ -105,3 +105,19 @@ function changeConstitution(constitutionNumber){
     $(".constitution-text").text("The Constitutions of the University of Toronto Computer Engineering Undergraduate Club");
   }
 }
+
+document.getElementById("nav-button").onclick = function() {
+  console.log("nav clicks")
+  var canSee = $("#navbarSupportedContent").is(":visible");
+  console.log(canSee)
+  var title = document.getElementById("title");
+  var subtitle = document.getElementById("subtitle");
+
+  if (canSee) {
+    title.classList.remove("title-push-down");
+    subtitle.classList.remove("subtitle-push-down");
+  } else {
+    title.classList.add("title-push-down");
+    subtitle.classList.add("subtitle-push-down");
+  }
+};
