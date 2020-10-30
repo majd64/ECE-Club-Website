@@ -148,10 +148,6 @@ b {
 }
 
 /* COMPOSE */
-.compose-container {
-  margin-top: 100px;
-}
-
 .compose-buttons {
   margin-bottom: 100px;
 }
@@ -258,10 +254,6 @@ footer a {
 
   .post:last-of-type {
     margin-bottom: 120px;
-  }
-
-  .edit-posts-button {
-    display: none;
   }
 }
 
