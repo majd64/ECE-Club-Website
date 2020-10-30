@@ -23,18 +23,18 @@ $("#toggleDarkMode").click(function() {
 
 //removes dark mode if on mobile (dont ask why), changes the header img based
 //on wether mobile or desktop
-$(function() {
-  $(window).resize(function() {
-      if ($(this).width() <= 991) {
-        localStorage.setItem("darkMode", "disabled");
-        toggleDarkMode();
-        $(".header img").attr("src", "/images/mobileHeaderImg.jpg");
-      } else {
-        $(".header img").attr("src", "images/desktopHeaderImg.jpeg");
-      }
-    })
-    .resize(); //trigger resize on page load
-});
+// $(function() {
+//   $(window).resize(function() {
+//       if ($(this).width() <= 991) {
+//         localStorage.setItem("darkMode", "disabled");
+//         toggleDarkMode();
+//         $(".header img").attr("src", "images/banner.png");
+//       } else {
+//         $(".header img").attr("src", "images/banner.png");
+//       }
+//     })
+//     .resize(); //trigger resize on page load
+// });
 
 //user submitted password => makes post request to server with submitPassword
 //if server responds with success, success message is shown for a bit then
@@ -94,11 +94,13 @@ $(document).ready(function() {
 //when the constitution is changed, this function loads the correct pdf
 function changeConstitution(constitutionNumber){
   if (constitutionNumber === 1){
-    $("#constitution").attr("src", "ee.pdf");
+    $("#constitution").attr("data", "ee.pdf");
+    $("#alt-link").attr("href", "ee.pdf");
     $(".constitution-dropdown").text("Electrical Engineering Constitution");
     $(".constitution-text").text("The Constitutions of the University of Toronto Electrical Engineering Undergraduate Club");
   }else{
-    $("#constitution").attr("src", "ce.pdf");
+    $("#constitution").attr("data", "ce.pdf");
+    $("#alt-link").attr("href", "ce.pdf");
     $(".constitution-dropdown").text("Computer Engineering Constitution");
     $(".constitution-text").text("The Constitutions of the University of Toronto Computer Engineering Undergraduate Club");
   }
